@@ -6,7 +6,6 @@ def timeToRot(self, grid):
     orange. Each minute, a rotten orange contaminates its 4-directional neighbors. Return the number
     of minutes until all oranges rot.
     """
-    pass
     # rows = len(grid)
     # cols = len(grid[0])
     # # psuedocode:
@@ -18,7 +17,9 @@ def timeToRot(self, grid):
     #         # if none found --> return -1
     #         # if it is found
     # for x, row in enumerate(grid):
+    # for x in range(rows):
     #     for y, col in enumerate(row):
+    #     for y in range(cols):
     #         if grid[x][y] == 2:
     #             queue.append((x, y))
     # if len(queue) == 0:
@@ -57,26 +58,40 @@ def timeToRot(self, grid):
     # # STEP 3: return minutes
     # return minutes
 
+    rows = len(grid)
+    cols = len(grid[0])
+    queue = deque()
+    count = 0
+    for i in range(rows):
+        for j in range(cols):
+            if grid[i][j] == 1: 
+                count += 1
+            if grid[i][j] == 2: 
+                queue.append((i, j))
+    time = 0
+    while queue:
+        length = len(queue)
+        for _ in range(length):
+            i, j = queue.popleft()
+            for row, col in [(i+1, j), (i-1, j), (i, j+1), (i, j-1)]:
+                if row > 0 and grid[row - 1][col] == 1:
+                    grid[row - 1][col] == 2
+                    queue.append((row - 1, col, time + 1))
 
-# Test Cases
-oranges1 = [
-    [2,1,1],
-    [1,1,0],
-    [0,1,1]
-]
-assert timeToRot(oranges1) == 4
+                if row > 0 and grid[row - 1][col] == 1:
+                    grid[row - 1][col] == 2
+                    queue.append((row + 1, col, time - 1))
 
-oranges2 = [
-    [2,1,1],
-    [0,1,1],
-    [1,0,1]
-]
-assert timeToRot(oranges2) == -1
+                if col > 0 and grid[row][col - 1] == 1:
+                    grid[row - 1][col] == 2
+                    queue.append((row, col - 1, time + 1))
 
-oranges3 = [
-    [0,2]
-]
-assert timeToRot(oranges3) == 0
+                if col < cols - 1 and grid[row][col + 1] == 1:
+                    grid[row][col + 1] == 2
+                    queue.append((row, col + 1, time - 1))
+
+        time += 1
+    return time
 
     # queue = deque()
 
